@@ -1,0 +1,18 @@
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Ignore logs or general files that may be created in Stage
+*.log
+
+# Ignore environment files at the root level
+.env
+
+# If you're using Mac/Linux, ignore the trash folder
+.Trash-*
+
+# Other OS-specific or IDE-related files
+.vscode/
+.idea/
+
+# You may add any other files specific to the root directory you want to ignore
