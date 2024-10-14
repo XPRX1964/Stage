@@ -11,6 +11,7 @@ import NotFoud from "./Pages/NotFound/NotFoud";
 import Login from "./Pages/Login/Login";
 import Register from "./Pages/Register/Register";
 import Cart from "./Pages/Cart/Cart";
+import FavoritesList from "./Pages/Favourite/FavoritesList";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
             <Route exact path="/register" element={<Register />} />
             <Route exact path="/myaccount" element={<MyAccount />} />
             <Route exact path="/cart" element={<Cart />} />
+            <Route exact path="/favorites" element={<FavoritesList />} />
             <Route path="*" element={<NotFoud />} />
           </Routes>
         </div>

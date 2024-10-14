@@ -1,19 +1,50 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import HeartIcon from "../../../../Components/Header/HeartIcon";
 import ShopingCart from "../../../../Components/Header/ShopingCart";
 import EyeSvg from "../EyeSvg";
 import ProductCard from "../../../../Components/ProductCard/ProductCard";
 
 const Buypopup = ({ imgsrc, productname, price }) => {
-  console.log("Props received:", { imgsrc, productname, price });
-  const [color, setColor] = useState("white");
-  const [fill, setFill] = useState("none");
+  const [isFavorite, setIsFavorite] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
+  const [showNotification, setShowNotification] = useState(false);
+  const [notificationProductName, setNotificationProductName] = useState("");
+  const [notificationAction, setNotificationAction] = useState("");
 
-  const toggleColor = () => {
-    setColor((prevColor) => (prevColor === "white" ? "none" : "white"));
-    setFill((prevFill) => (prevFill === "none" ? "white" : "none"));
+  useEffect(() => {
+    const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+    setIsFavorite(favorites.some((item) => item.name === productname));
+  }, [productname]);
+
+  const toggleFavorite = () => {
+    const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+    let updatedFavorites;
+    let action;
+
+    if (isFavorite) {
+      updatedFavorites = favorites.filter((item) => item.name !== productname);
+      action = "removed from";
+    } else {
+      updatedFavorites = [
+        ...favorites,
+        { name: productname, image: imgsrc, price: price },
+      ];
+      action = "added to";
+    }
+
+    localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+    setIsFavorite(!isFavorite);
+
+    // Show notification
+    setNotificationProductName(productname);
+    setNotificationAction(action);
+    setShowNotification(true);
+
+    // Hide the notification after 3 seconds
+    setTimeout(() => {
+      setShowNotification(false);
+    }, 3000);
   };
 
   const handlePopupToggle = () => {
@@ -31,7 +62,6 @@ const Buypopup = ({ imgsrc, productname, price }) => {
     console.log("Product:", product.name);
 
     const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
-
     const productIndex = existingCart.findIndex(
       (item) => item.name === product.name
     );
@@ -44,17 +74,25 @@ const Buypopup = ({ imgsrc, productname, price }) => {
 
     localStorage.setItem("cart", JSON.stringify(existingCart));
 
-    alert(`${product.name} added to cart`);
+    // Show the notification
+    setNotificationProductName(product.name);
+    setNotificationAction("added to cart");
+    setShowNotification(true);
+
+    // Hide the notification after 3 seconds
+    setTimeout(() => {
+      setShowNotification(false);
+    }, 3000);
   };
 
   return (
     <>
       <div className="absolute bottom-0 left-0 right-0 flex justify-center items-center">
-        <button onClick={toggleColor}>
+        <button onClick={toggleFavorite}>
           <div className="h-[40px] w-[40px] flex justify-center items-center opacity-0 group-hover:opacity-100 bg-red-500 hover:bg-red-600 transition-opacity duration-300 delay-[120ms] hover:transition hover:duration-300 ease-in-out">
             <HeartIcon
-              color={color}
-              fill={fill}
+              color="white"
+              fill={isFavorite ? "white" : "none"}
               animate="hover:animate-pulse"
             />
           </div>
@@ -108,6 +146,19 @@ const Buypopup = ({ imgsrc, productname, price }) => {
               productname={productname}
               price={price}
             />
+          </div>
+        </div>
+      )}
+
+      {showNotification && (
+        <div className="fixed z-50 bottom-3 left-3">
+          <div className="flex justify-center items-center bg-slate-400 p-2 rounded">
+            <span className="font-poppins text-green-400">
+              {notificationProductName}&nbsp;
+            </span>
+            <span className="text-white">
+              {notificationAction} Favorites ✅
+            </span>
           </div>
         </div>
       )}

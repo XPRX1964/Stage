@@ -17,9 +17,19 @@ const Cart = () => {
   };
 
   const removeItem = (index) => {
+    const removedItem = cart[index]; // Get the item being removed
     const updatedCart = cart.filter((_, i) => i !== index);
     setCart(updatedCart);
     localStorage.setItem("cart", JSON.stringify(updatedCart));
+
+    // Show the notification
+    setNotificationProductName(removedItem.name); // Use the name of the removed item
+    setShowNotification(true);
+
+    // Hide the notification after 5 seconds
+    setTimeout(() => {
+      setShowNotification(false);
+    }, 5000);
   };
 
   const calculateTotal = () => {
@@ -27,7 +37,8 @@ const Cart = () => {
       .reduce((total, item) => total + item.price * item.quantity, 0)
       .toFixed(2);
   };
-
+  const [showNotification, setShowNotification] = useState(false);
+  const [notificationProductName, setNotificationProductName] = useState("");
   return (
     <>
       <div className="py-[35px] flex justify-center gap-2 bg-[#f7f7f7] w-full text-center font-poppins font-[15px] ">
@@ -130,6 +141,16 @@ const Cart = () => {
           </div>
         )}
       </div>
+      {showNotification && (
+        <div className="fixed z-50 bottom-3 left-3 ">
+          <div className=" flex justify-center items-center bg-slate-400 p-2 rounded">
+            <span className="font-poppins text-red-600">
+              {notificationProductName}&nbsp;
+            </span>
+            <span className="text-white"> removed from cart ❌</span>
+          </div>
+        </div>
+      )}
     </>
   );
 };

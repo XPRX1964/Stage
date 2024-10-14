@@ -40,7 +40,9 @@ const Icons = ({
       </div>
       <div>
         <button className="group">
-          <HeartIcon2 color="text-black group-hover:text-red-600" />
+          <Link to="/favorites">
+            <HeartIcon2 color="text-black group-hover:text-red-600" />
+          </Link>
         </button>
       </div>
       <div>
