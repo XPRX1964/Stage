@@ -1,12 +1,12 @@
 import React from "react";
 import ProductsHeader from "./ProductsHeader";
-import ProductsGrid from "./ProductsGrid";
+import ProductsList from "./ProductsList";
 
 function HomeProducts() {
   return (
     <div className="flex flex-col items-center w-screen">
       <ProductsHeader />
-      <ProductsGrid cardwidth="300px" />
+      <ProductsList cardwidth="300px" />
     </div>
   );
 }

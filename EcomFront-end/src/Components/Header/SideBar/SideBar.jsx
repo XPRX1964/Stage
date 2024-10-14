@@ -184,7 +184,9 @@ function SideBar({ isOpen, toggleSidebar }) {
                           <ShopingCart color="text-black" />{" "}
                         </div>
                         <div>
-                          <span>Shopping Cart</span>
+                          <Link to="/cart">
+                            <span>Shopping Cart</span>
+                          </Link>
                         </div>
                       </div>
                     </button>

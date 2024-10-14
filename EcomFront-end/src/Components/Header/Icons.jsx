@@ -10,6 +10,7 @@ const Icons = ({
   toggleProfile,
   isSearchOpen,
   isProfileOpen,
+  isAuthenticated, // New prop
 }) => {
   const [searchHeight, setSearchHeight] = useState(0);
   const [profileHeight, setProfileHeight] = useState(0);
@@ -18,27 +19,11 @@ const Icons = ({
   const profileRef = useRef(null);
 
   useEffect(() => {
-    if (isSearchOpen) {
-      setSearchHeight(searchRef.current.scrollHeight);
-    } else {
-      setSearchHeight(0);
-    }
+    setSearchHeight(isSearchOpen ? searchRef.current.scrollHeight : 0);
   }, [isSearchOpen]);
 
   useEffect(() => {
-    if (isProfileOpen) {
-      setProfileHeight(profileRef.current.scrollHeight);
-    } else {
-      setProfileHeight(0);
-    }
-  }, [isProfileOpen]);
-
-  useEffect(() => {
-    if (isProfileOpen) {
-      setProfileHeight(80); // Set custom height, e.g., 400px
-    } else {
-      setProfileHeight(0);
-    }
+    setProfileHeight(isProfileOpen ? profileRef.current.scrollHeight : 0);
   }, [isProfileOpen]);
 
   return (
@@ -60,11 +45,12 @@ const Icons = ({
       </div>
       <div>
         <button className="group">
-          <ShopingCart color="group-hover:text-red-600 text-black" />
+          <Link to="/cart">
+            <ShopingCart color="group-hover:text-red-600 text-black" />
+          </Link>
         </button>
       </div>
 
-      {/* Search Input Dropdown */}
       <div
         ref={searchRef}
         style={{
@@ -94,22 +80,26 @@ const Icons = ({
           overflow: "hidden",
           transition: "height 0.5s ease",
         }}
-        className="fixed top-[89px] right-[9.7%] rounded w-[8%] z-40 bg-white shadow-md laptop:flex justify-center hidden "
+        className="fixed top-[89px] right-[9.7%] rounded w-[8%] z-40 bg-white shadow-md laptop:flex justify-center hidden"
       >
         <div className="flex-1 flex justify-center">
-          <div className="flex flex-col items-start py-1 justify-between font-poppins text-[13px] ">
+          <div className="flex flex-col items-start py-1 justify-between font-poppins text-[13px]">
+            {/* Conditionally render links based on authentication status */}
+            {!isAuthenticated ? (
+              <>
+                <button>
+                  <div className="hover:text-red-500 transition-colors">
+                    <Link to="/login">Login</Link>
+                  </div>
+                </button>
+                <button>
+                  <div className="hover:text-red-500 transition-colors">
+                    <Link to="/register">Register</Link>
+                  </div>
+                </button>
+              </>
+            ) : null}
             <button>
-              <div className="hover:text-red-500 transition-colors">
-                <Link to="/login">Login</Link>
-              </div>
-            </button>
-            <button>
-              <div className="hover:text-red-500 transition-colors">
-                <Link to="/register">Register</Link>
-              </div>
-            </button>
-            <button>
-              {" "}
               <div className="hover:text-red-500 transition-colors">
                 <Link to="/myaccount">My Account</Link>
               </div>

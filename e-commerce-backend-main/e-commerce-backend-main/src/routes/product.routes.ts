@@ -34,8 +34,7 @@ const authenticated = new Authenticated();
  *                   description: The total number of products.
  *                   example: 100
  */
-router.route('/count')
-  .get(productController.countProducts);
+router.route('/count').get(productController.countProducts);
 
 /**
  * @swagger
@@ -73,9 +72,20 @@ router.route('/count')
  *       401:
  *         description: Unauthorized
  */
-router.route('/')
-  .get(ProductValidation.query(), handleValidation, productController.getAllProducts)
-  .post(authenticated.protect, authorize('admin'), ProductValidation.createProduct(), handleValidation, productController.createProduct);
+router
+  .route('/')
+  .get(
+    ProductValidation.query(),
+    handleValidation,
+    productController.getAllProducts,
+  )
+  .post(
+    authenticated.protect,
+    authorize('admin'),
+    ProductValidation.createProduct(),
+    handleValidation,
+    productController.createProduct,
+  );
 
 /**
  * @swagger
@@ -148,10 +158,27 @@ router.route('/')
  *       401:
  *         description: Unauthorized
  */
-router.route('/:id')
-  .get(ProductValidation.params(), handleValidation, productController.getProduct)
-  .patch(authenticated.protect, authorize('admin'), ProductValidation.updateProduct(), handleValidation, productController.updateProduct)
-  .delete(authenticated.protect, authorize('admin'), ProductValidation.params(), handleValidation, productController.deleteProduct);
+router
+  .route('/:id')
+  .get(
+    ProductValidation.params(),
+    handleValidation,
+    productController.getProduct,
+  )
+  .patch(
+    authenticated.protect,
+    authorize('admin'),
+    ProductValidation.updateProduct(),
+    handleValidation,
+    productController.updateProduct,
+  )
+  .delete(
+    authenticated.protect,
+    authorize('admin'),
+    ProductValidation.params(),
+    handleValidation,
+    productController.deleteProduct,
+  );
 
 /**
  * @swagger
@@ -186,8 +213,15 @@ router.route('/:id')
  *       401:
  *         description: Unauthorized
  */
-router.route('/:id/deactivate')
-  .patch(authenticated.protect, authorize('admin'), ProductValidation.params(), handleValidation, productController.deactivateProduct);
+router
+  .route('/:id/deactivate')
+  .patch(
+    authenticated.protect,
+    authorize('admin'),
+    ProductValidation.params(),
+    handleValidation,
+    productController.deactivateProduct,
+  );
 
 /**
  * @swagger
@@ -222,7 +256,14 @@ router.route('/:id/deactivate')
  *       401:
  *         description: Unauthorized
  */
-router.route('/:id/activate')
-  .patch(authenticated.protect, authorize('admin'), ProductValidation.params(), handleValidation, productController.activateProduct);
+router
+  .route('/:id/activate')
+  .patch(
+    authenticated.protect,
+    authorize('admin'),
+    ProductValidation.params(),
+    handleValidation,
+    productController.activateProduct,
+  );
 
 export default router;

@@ -1,6 +1,6 @@
 import React from "react";
 import HomeProducts from "../Home/HomeProducts/HomeProducts";
-import ProductsGrid from "../Home/HomeProducts/ProductsGrid";
+import ProductsList from "../Home/HomeProducts/ProductsList";
 import SearchBar from "./SearchBar";
 import { Link } from "react-router-dom";
 
@@ -113,7 +113,7 @@ function Shop() {
           </div>
         </div>
         <div className="w-full px-3">
-          <ProductsGrid />
+          <ProductsList />
         </div>
       </div>
     </div>

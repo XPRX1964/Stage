@@ -2,59 +2,116 @@ import { useState } from "react";
 import HeartIcon from "../../../../Components/Header/HeartIcon";
 import ShopingCart from "../../../../Components/Header/ShopingCart";
 import EyeSvg from "../EyeSvg";
+import ProductCard from "../../../../Components/ProductCard/ProductCard";
 
-const Buypopup = () => {
-  const [color, setColor] = useState("white"); // Stroke color
-  const [fill, setFill] = useState("none"); // Fill color
+const Buypopup = ({ imgsrc, productname, price }) => {
+  console.log("Props received:", { imgsrc, productname, price });
+  const [color, setColor] = useState("white");
+  const [fill, setFill] = useState("none");
+  const [isHovered, setIsHovered] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
 
   const toggleColor = () => {
     setColor((prevColor) => (prevColor === "white" ? "none" : "white"));
     setFill((prevFill) => (prevFill === "none" ? "white" : "none"));
   };
 
-  const [isHovered, setIsHovered] = useState(false);
+  const handlePopupToggle = () => {
+    setShowPopup(!showPopup);
+  };
+
+  const addToCart = () => {
+    const product = {
+      name: productname,
+      price: price,
+      image: imgsrc,
+      quantity: 1,
+    };
+
+    console.log("Product:", product.name);
+
+    const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    const productIndex = existingCart.findIndex(
+      (item) => item.name === product.name
+    );
+
+    if (productIndex >= 0) {
+      existingCart[productIndex].quantity += 1;
+    } else {
+      existingCart.push(product);
+    }
+
+    localStorage.setItem("cart", JSON.stringify(existingCart));
+
+    alert(`${product.name} added to cart`);
+  };
 
   return (
-    <div className="absolute bottom-0 left-0 right-0 flex justify-center items-center">
-      <button onClick={toggleColor}>
-        <div className="h-[40px] w-[40px] flex justify-center items-center opacity-0 group-hover:opacity-100 bg-red-500 hover:bg-red-600 transition-opacity duration-300 delay-[120ms]  hover:transition hover:duration-300 ease-in-out">
-          <HeartIcon color={color} fill={fill} animate="hover:animate-pulse" />
-        </div>
-      </button>
-      <button
-        className="flex-1"
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-      >
-        <div
-          className={`flex-1 group flex justify-center items-center text-white gap-2 font-poppins opacity-0 group-hover:opacity-100 bg-red-500 hover:bg-red-600 h-[40px] delay-[180ms] transition-all duration-700 ease-in-out ${
-            isHovered ? "" : ""
-          }`}
+    <>
+      <div className="absolute bottom-0 left-0 right-0 flex justify-center items-center">
+        <button onClick={toggleColor}>
+          <div className="h-[40px] w-[40px] flex justify-center items-center opacity-0 group-hover:opacity-100 bg-red-500 hover:bg-red-600 transition-opacity duration-300 delay-[120ms] hover:transition hover:duration-300 ease-in-out">
+            <HeartIcon
+              color={color}
+              fill={fill}
+              animate="hover:animate-pulse"
+            />
+          </div>
+        </button>
+        <button
+          className="flex-1"
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+          onClick={addToCart}
         >
           <div
-            className={`${
-              isHovered
-                ? "animate-pulse flex items-center justify-center"
-                : "flex items-center justify-center"
-            }`}
+            className={`flex-1 group flex justify-center items-center text-white gap-2 font-poppins opacity-0 group-hover:opacity-100 bg-red-500 hover:bg-red-600 h-[40px] delay-[180ms] transition-all duration-700 ease-in-out`}
           >
-            Add To Cart
+            <div
+              className={`flex items-center justify-center ${
+                isHovered ? "animate-pulse" : ""
+              }`}
+            >
+              <span>Add To Cart</span>
+            </div>
+            <div className="flex p-1">
+              <ShopingCart
+                color="white"
+                className={`${isHovered ? "animate-pulse" : ""}`}
+              />
+            </div>
           </div>
-          <div className="flex p-1">
-            <ShopingCart
-              color="white"
-              className={`${isHovered ? "animate-pulse" : ""}`}
+        </button>
+
+        <button onClick={handlePopupToggle}>
+          <div className="h-[40px] w-[40px] flex justify-center items-center opacity-0 group-hover:opacity-100 bg-red-500 hover:bg-red-600 transition-opacity duration-1000 delay-[240ms] p-[6px] hover:transition hover:duration-300 ease-in-out">
+            <EyeSvg color="white" className="hover:animate-pulse" />
+          </div>
+        </button>
+      </div>
+
+      {showPopup && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div
+            className="relative bg-white p-6 rounded-lg transform transition-transform duration-300 ease-in-out scale-100"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              className="absolute top-0 right-0 bg-red-500 text-white z-50 px-2 py-1 rounded"
+              onClick={handlePopupToggle}
+            >
+              X
+            </button>
+            <ProductCard
+              imgsrc={imgsrc}
+              productname={productname}
+              price={price}
             />
           </div>
         </div>
-      </button>
-
-      <button>
-        <div className="h-[40px] w-[40px] flex justify-center items-center opacity-0 group-hover:opacity-100 bg-red-500 hover:bg-red-600  transition-opacity duration-1000 delay-[240ms] p-[6px]  hover:transition hover:duration-300 ease-in-out">
-          <EyeSvg color="white" className="hover:animate-pulse" />
-        </div>
-      </button>
-    </div>
+      )}
+    </>
   );
 };
 

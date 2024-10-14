@@ -10,6 +10,7 @@ import MyAccount from "./Pages/MyAccount/MyAccount";
 import NotFoud from "./Pages/NotFound/NotFoud";
 import Login from "./Pages/Login/Login";
 import Register from "./Pages/Register/Register";
+import Cart from "./Pages/Cart/Cart";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
             <Route exact path="/login" element={<Login />} />
             <Route exact path="/register" element={<Register />} />
             <Route exact path="/myaccount" element={<MyAccount />} />
+            <Route exact path="/cart" element={<Cart />} />
             <Route path="*" element={<NotFoud />} />
           </Routes>
         </div>
